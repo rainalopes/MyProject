@@ -163,11 +163,16 @@ font-size:15px;
 font-size:20px;
 }
 /*chart style*/
-#chartdiv {
+#chartdiv1 {
 	width		: 100%;
-	height		: 200px;
+	height		: 400px;
 	font-size	: 11px;
-}		
+}	
+#chartdiv2 {
+	width	: 100%;
+	height	: 400px;
+	
+}				
 
 </style>
 </head>
@@ -309,10 +314,10 @@ font-size:20px;
 		<div id="c1" class="eight wide column">
 		<div class="ui segment">
 			<h2><u>COMPETITION</u></h2>
-			<div id="chartdiv"></div>
+			<div id="chartdiv1"></div>
 			<script>
 			<!--Chart code-->
-				var chart = AmCharts.makeChart("chartdiv", {
+				var chart = AmCharts.makeChart("chartdiv1", {
 	"type": "serial",
      "theme": "light",
 	"categoryField": "source",
@@ -380,7 +385,122 @@ font-size:20px;
 		<div id="c1" class="eight wide column">
 		<div class="ui segment">
 			<h2><u>SENTIMENTS</u></h2>
-			<canvas id="canvas2"></canvas>
+			<div id="chartdiv2"></div>
+			<!--chart code-->
+			<script>
+			var chartData = generateChartData();
+
+var chart = AmCharts.makeChart("chartdiv2", {
+    "type": "serial",
+    "theme": "light",
+    "legend": {
+        "useGraphSettings": true
+    },
+    "dataProvider": chartData,
+    "synchronizeGrid":true,
+    "valueAxes": [{
+        "id":"v1",
+        "axisColor": "#FF6600",
+        "axisThickness": 2,
+        "axisAlpha": 1,
+        "position": "left"
+    }, {
+        "id":"v2",
+        "axisColor": "#FCD202",
+        "axisThickness": 2,
+        "axisAlpha": 1,
+        "position": "right"
+    }, {
+        "id":"v3",
+        "axisColor": "#B0DE09",
+        "axisThickness": 2,
+        "gridAlpha": 0,
+        "offset": 50,
+        "axisAlpha": 1,
+        "position": "left"
+    }],
+    "graphs": [{
+        "valueAxis": "v1",
+        "lineColor": "#FF6600",
+        "bullet": "round",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Negative mentions",
+        "valueField": "negative_mentions",
+		"fillAlphas": 0
+    }, {
+        "valueAxis": "v2",
+        "lineColor": "#FCD202",
+        "bullet": "square",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Neutral Mentions",
+        "valueField": "neutral_mentions",
+		"fillAlphas": 0
+    }, {
+        "valueAxis": "v3",
+        "lineColor": "#B0DE09",
+        "bullet": "triangleUp",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Positive mentions",
+        "valueField": "positive_mentions",
+		"fillAlphas": 0
+    }],
+    "chartScrollbar": {},
+    "chartCursor": {
+        "cursorPosition": "mouse"
+    },
+    "categoryField": "date",
+    "categoryAxis": {
+        "parseDates": true,
+        "axisColor": "#DADADA",
+        "minorGridEnabled": true
+    },
+    "export": {
+    	"enabled": true,
+        "position": "bottom-right"
+     }
+});
+
+chart.addListener("dataUpdated", zoomChart);
+zoomChart();
+
+
+// generate some random data, quite different range
+function generateChartData() {
+    var chartData = [];
+    var firstDate = new Date();
+    firstDate.setDate(firstDate.getDate() - 100);
+    var n = [0,0,0,1,0,0,0,0,0,0,0,0,0];
+    var neu = [2,3,1,0,4,0,2,3,0,1,1,1,0];
+    var p = [3,11,12,8,12,10,18,9,7,5,15,9,2];
+    for (var i = 0; i < 13; i++) {
+        // we create date objects here. In your data, you can have date strings
+        // and then set format of your dates using chart.dataDateFormat property,
+        // however when possible, use date objects, as this will speed up chart rendering.
+        
+        var newDate = new Date(firstDate);
+        newDate.setDate(newDate.getDate() + i);
+
+        var negative_mentions = n[i];
+        var neutral_mentions = neu[i];
+        var positive_mentions = p[i];
+
+        chartData.push({
+            date: newDate,
+            positive_mentions: positive_mentions,
+            negative_mentions: negative_mentions,
+            neutral_mentions: neutral_mentions
+        });
+    }
+    return chartData;
+}
+
+function zoomChart(){
+    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
+}
+</script>
 		</div>
 		</div>
 		
