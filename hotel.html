@@ -9,11 +9,17 @@
 <meta name="author" content="">
 <title>Hotel Reputation Management System</title>
 <style type="text/css">
-    #chartdiv {
+    #chartdiv1 {
     width       : 100%;
-    height      : 200px;
+    height      : 400px;
     font-size   : 11px;
 }
+
+#chartdiv2 {
+    width   : 100%;
+    height  : 400px;
+    
+}   
 </style>
 <!-- <link rel="stylesheet" type="text/css" href="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.css"> -->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
@@ -50,10 +56,10 @@ $.ajax({
            
 		   document.getElementById('Hotel_Title').innerHTML = result.title;
 		   $("#Hotel_image").attr("src", result.image);
-		   // document.getElementById('Location').innerHTML = "<b>Location :</b> "+result.location;
-		   // document.getElementById('Address').innerHTML = "<b>Address :</b> "+result.address;
+		   document.getElementById('Location').innerHTML = "<b>Location :</b> "+result.location;
+		   document.getElementById('Address').innerHTML = "<b>Address :</b> "+result.address;
 		   // document.getElementById('ratinglabel').innerHTML = "<b>Rating : "+result.rating+"</b>";
-		   // document.getElementById('rating').value = result.rating;
+		   document.getElementById('rating').innerHTML = result.rating;
 		   document.getElementById('Hotel_Reviews').innerHTML = result.total_count
         }
 });
@@ -62,7 +68,6 @@ $.ajax({
 </head>
 
 <body>
-<div class="ui container">
     <div id="wrapper">
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -113,10 +118,20 @@ $.ajax({
             </div>
             <!-- /.row -->
             <div class="row">
+            <img class="ui middle aligned big image" id="Hotel_image"/>
+            <div class="seven wide column" id="details">
+            <label id="Location" ></label><br/><br/>
+            <label id="Address" ></label><br/><br/>
+            <!-- <label id="ratinglabel"></label><br/><br/> -->
+            <!-- <meter id="rating" min="0" max="5"></meter> -->
+        </div>
                 <div class="col-lg-3 col-md-6">
+
                     <div class="panel panel-primary">
+
                         <div class="panel-heading">
                             <div class="row">
+
                                 <div class="col-xs-3">
                                     <i class="fa fa-comments fa-5x"></i>
                                 </div>
@@ -135,9 +150,35 @@ $.ajax({
                         </a>
                     </div>
                 </div>
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="panel panel-green">
+
+                        <div class="panel-heading">
+                            <div class="row">
+
+                                <div class="col-xs-3">
+                                    
+                                    <i class="fa fa-star fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="rating" class="huge"></div>
+                                    <div>Rating</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Competition
@@ -147,9 +188,9 @@ $.ajax({
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div id="chartdiv"></div>
+                            <div id="chartdiv1"></div>
                             <script>
-                var chart = AmCharts.makeChart("chartdiv", {
+                var chart = AmCharts.makeChart("chartdiv1", {
     "type": "serial",
      "theme": "light",
     "categoryField": "source",
@@ -213,10 +254,211 @@ $.ajax({
                         </div>
                         <!-- /.panel-body -->
                     </div>
+                    </div>
                     <!-- /.panel -->
+                    <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Sentiment Analysis
+                            <div class="pull-right">
+                               
+							</div>	
+                            </div>
+                            <div id="chartdiv2"></div>
+            <!--chart code-->
+            <script>
+            var chartData = generateChartData();
+
+var chart = AmCharts.makeChart("chartdiv2", {
+    "type": "serial",
+    "theme": "light",
+    "legend": {
+        "useGraphSettings": true
+    },
+    "dataProvider": chartData,
+    "synchronizeGrid":true,
+    "valueAxes": [{
+        "id":"v1",
+        "axisColor": "#FF6600",
+        "axisThickness": 2,
+        "axisAlpha": 1,
+        "position": "left"
+    }, {
+        "id":"v2",
+        "axisColor": "#FCD202",
+        "axisThickness": 2,
+        "axisAlpha": 1,
+        "position": "right"
+    }, {
+        "id":"v3",
+        "axisColor": "#B0DE09",
+        "axisThickness": 2,
+        "gridAlpha": 0,
+        "offset": 50,
+        "axisAlpha": 1,
+        "position": "left"
+    }],
+    "graphs": [{
+        "valueAxis": "v1",
+        "lineColor": "#FF6600",
+        "bullet": "round",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Negative mentions",
+        "valueField": "negative_mentions",
+        "fillAlphas": 0
+    }, {
+        "valueAxis": "v2",
+        "lineColor": "#FCD202",
+        "bullet": "square",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Neutral Mentions",
+        "valueField": "neutral_mentions",
+        "fillAlphas": 0
+    }, {
+        "valueAxis": "v3",
+        "lineColor": "#B0DE09",
+        "bullet": "triangleUp",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Positive mentions",
+        "valueField": "positive_mentions",
+        "fillAlphas": 0
+    }],
+    "chartScrollbar": {},
+    "chartCursor": {
+        "cursorPosition": "mouse"
+    },
+    "categoryField": "date",
+    "categoryAxis": {
+        "parseDates": true,
+        "axisColor": "#DADADA",
+        "minorGridEnabled": true
+    },
+    "export": {
+        "enabled": true,
+        "position": "bottom-right"
+     }
+});
+
+chart.addListener("dataUpdated", zoomChart);
+zoomChart();
+
+
+// generate some random data, quite different range
+function generateChartData() {
+    var chartData = [];
+    var firstDate = new Date();
+    firstDate.setDate(firstDate.getDate() - 100);
+    var n = [0,0,0,1,0,0,0,0,0,0,0,0,0];
+    var neu = [2,3,1,0,4,0,2,3,0,1,1,1,0];
+    var p = [3,11,12,8,12,10,18,9,7,5,15,9,2];
+    for (var i = 0; i < 13; i++) {
+        // we create date objects here. In your data, you can have date strings
+        // and then set format of your dates using chart.dataDateFormat property,
+        // however when possible, use date objects, as this will speed up chart rendering.
+        
+        var newDate = new Date(firstDate);
+        newDate.setDate(newDate.getDate() + i);
+
+        var negative_mentions = n[i];
+        var neutral_mentions = neu[i];
+        var positive_mentions = p[i];
+
+        chartData.push({
+            date: newDate,
+            positive_mentions: positive_mentions,
+            negative_mentions: negative_mentions,
+            neutral_mentions: neutral_mentions
+        });
+    }
+    return chartData;
+}
+
+function zoomChart(){
+    chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
+}
+</script>
+        <!-- </div> -->
+                        </div>
+                    
+                    </div>
+                    <!-- /.panel -->
+                
+            <!-- col-lg-8 -->
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Latest Reviews
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group" style="overflow: auto; height: 300px;">
+                               
+                                <table id="review_table" class="ui padded table" align="center">
+                <tbody id="review_body">
+                    <script>
+                        $.ajax({
+                            url: 'api_output.json' , 
+                            dataType:'json',
+                            success:function(result){
+                                var table = document.getElementById("review_body");
+                                for(i=0;i<result["features"].length;i++){
+                                        /*var feature_name = result["features"][i]["feature"];
+                                        var row = table.insertRow(-1);
+                                        var feature_head = row.insertCell(0);
+                                        feature_head.innerHTML = "<div><h2>"+feature_name+"</h2></div>";
+                                        feature_head.style.backgroundColor = "#FBD76F";*/
+                                    for(j=0;j<result["features"][i]["examples"].length;j++){
+                                        var review_text = result["features"][i]["examples"][j]["text"];
+                                        var review_auth = result["features"][i]["examples"][j]["author"][0];
+                                        var review_date = result["features"][i]["examples"][j]["date"];
+                                        var row = table.insertRow(-1);
+                                        var review = row.insertCell(0);
+                                        review.innerHTML = "<div class='review ui stackable grid' id='load'><div class='two wide column'>Sources</div><div class='seven wide column snippet'><div class='content'>"+review_text+"</div></div><div class='two wide column'>rating</div><div class='three wide column'><i>Dated:"+review_date+"</div><div class='two wide column'><i class='large reply icon'></i><a href='#'>Reply</a></div></div><br/>";
+                                    }
+                                
+                                }
+                            
+                            }
+                        
+                        });
+                        
+                        $(function () {
+    $("#review_table,tr").slice(0, 4).show();
+    $("#loadMore").on('click', function (e) {
+        e.preventDefault();
+        $("#review_table,tr:hidden").slice(0, 4).slideDown();
+        if ($("#review_table,tr:hidden").length == 0) {
+            $("#load").fadeOut('slow');
+        }
+        $('#review_table,tbody').animate({
+            scrollTop: $(this).offset().top
+        }, 1500);
+    });
+});
+
+
+
+
+                    </script>
+                </tbody>
+            </table>
+
+
+                            </div>
+                            <!-- /.list-group -->
+                           
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+            </div>
+			
+			   <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <!-- <i class="fa fa-bar-chart-o fa-fw"></i> Sentiment Analysis -->
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle"data-toggle="dropdown">
@@ -297,132 +539,9 @@ $.ajax({
                         </div>
                         <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel -->
 
-
-
-
-
-
-
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <ul class="timeline">
-                                <li>
-                                    <div class="timeline-badge"><i class="fa fa-check"></i>
-                                    </div>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                            <p><small class="text-muted"><i class="fa fa-clock-o"></i> 11 hours ago via Twitter</small>
-                                            </p>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero laboriosam dolor perspiciatis omnis exercitationem. Beatae, officia pariatur? Est cum veniam excepturi. Maiores praesentium, porro voluptas suscipit facere rem dicta, debitis.</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-inverted">
-                                    <div class="timeline-badge warning"><i class="fa fa-credit-card"></i>
-                                    </div>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dolorem quibusdam, tenetur commodi provident cumque magni voluptatem libero, quis rerum. Fugiat esse debitis optio, tempore. Animi officiis alias, officia repellendus.</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores odit qui est tempora eos, nostrum provident explicabo dignissimos debitis vel! Adipisci eius voluptates, ad aut recusandae minus eaque facere.</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="timeline-badge danger"><i class="fa fa-bomb"></i>
-                                    </div>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus numquam facilis enim eaque, tenetur nam id qui vel velit similique nihil iure molestias aliquam, voluptatem totam quaerat, magni commodi quisquam.</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-inverted">
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est quaerat asperiores sapiente, eligendi, nihil. Itaque quos, alias sapiente rerum quas odit! Aperiam officiis quidem delectus libero, omnis ut debitis!</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="timeline-badge info"><i class="fa fa-save"></i>
-                                    </div>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis minus modi quam ipsum alias at est molestiae excepturi delectus nesciunt, quibusdam debitis amet, beatae consequuntur impedit nulla qui! Laborum, atque.</p>
-                                            <hr>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-gear"></i> <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="#">Action</a>
-                                                    </li>
-                                                    <li><a href="#">Another action</a>
-                                                    </li>
-                                                    <li><a href="#">Something else here</a>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#">Separated link</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi fuga odio quibusdam. Iure expedita, incidunt unde quis nam! Quod, quisquam. Officia quam qui adipisci quas consequuntur nostrum sequi. Consequuntur, commodi.</p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-inverted">
-                                    <div class="timeline-badge success"><i class="fa fa-graduation-cap"></i>
-                                    </div>
-                                    <div class="timeline-panel">
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">Lorem ipsum dolor</h4>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt obcaecati, quaerat tempore officia voluptas debitis consectetur culpa amet, accusamus dolorum fugiat, animi dicta aperiam, enim incidunt quisquam maxime neque eaque.</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-            
-        </div>    
+        </div>
     </div>
-
    
 
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -440,7 +559,6 @@ $.ajax({
 
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
-	</div>
 </body>
 
 </html>
