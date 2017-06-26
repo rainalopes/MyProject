@@ -14,6 +14,7 @@
 <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
 <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+<script src="https://www.amcharts.com/lib/3/pie.js"></script>
 
 <script>
 $.ajax({
@@ -146,7 +147,7 @@ width:100%;
 width:100%;
 }
 #review_table tbody{
-height:500px;
+height:450px;
 display:block;
 overflow:auto;
 }
@@ -172,7 +173,19 @@ font-size:20px;
 	width	: 100%;
 	height	: 400px;
 	
-}				
+}
+#semipiechart {
+  width: 100%;
+  height: 350px;
+}
+#fullpie{
+ width: 100%;
+ height: 350px;
+}
+#stacked_column{
+	width: 100%;
+	height: 500px;
+}			
 
 </style>
 </head>
@@ -261,7 +274,7 @@ font-size:20px;
 							frating.innerHTML="<meter value="+featureRating+" min='0' low='2' max='5'></meter>"+featureRating;
 							ft.innerHTML=featureTitle;
 							
-							fh.innerHTML = featureHighlight;
+							fh.innerHTML = "<i>"+featureHighlight+"</i>";
 							
 						}
 							
@@ -313,10 +326,15 @@ font-size:20px;
 	<div class="ui stackable grid">
 		<div id="c1" class="eight wide column">
 		<div class="ui segment">
-			<h2><u>COMPETITION</u></h2>
+			<h2><i class="signal icon"></i><u>COMPETITION</u></h2>
 			<div id="chartdiv1"></div>
 			<script>
 			<!--Chart code-->
+			$.ajax({
+			url: 'api_output.json' , 
+			dataType:'json',
+			success:function(result){
+			
 				var chart = AmCharts.makeChart("chartdiv1", {
 	"type": "serial",
      "theme": "light",
@@ -376,15 +394,15 @@ font-size:20px;
     	"enabled": true
      }
 
-});
-			</script>
+});}
+	});		</script>
 				
 		</div>
 		</div>
 		
 		<div id="c1" class="eight wide column">
 		<div class="ui segment">
-			<h2><u>SENTIMENTS</u></h2>
+			<h2><i class="options icon"></i><u>SENTIMENTS</u></h2>
 			<div id="chartdiv2"></div>
 			<!--chart code-->
 			<script>
@@ -463,8 +481,8 @@ var chart = AmCharts.makeChart("chartdiv2", {
      }
 });
 
-chart.addListener("dataUpdated", zoomChart);
-zoomChart();
+/*chart.addListener("dataUpdated", zoomChart);
+zoomChart();*/
 
 
 // generate some random data, quite different range
@@ -497,9 +515,9 @@ function generateChartData() {
     return chartData;
 }
 
-function zoomChart(){
+/*function zoomChart(){
     chart.zoomToIndexes(chart.dataProvider.length - 20, chart.dataProvider.length - 1);
-}
+}*/
 </script>
 		</div>
 		</div>
@@ -508,7 +526,7 @@ function zoomChart(){
 	</div>
 	<br/>
 	<div class="ui segment" id="review_section">
-	<h2><u>LATEST REVIEWS</u><a href="#" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h2>
+	<h2><i class="alarm icon"></i><u>LATEST REVIEWS</u><a href="#" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h2>
 	<div class="ui divider"></div>
 			<table id="review_table" class="ui padded table" align=center>
 				<tbody id="review_body">
@@ -558,6 +576,279 @@ function zoomChart(){
 			</table>
 		
 	</div>
+	<br/>
+	
+		 <div class="ui stackable grid ui segment">
+			<div class="row ui segment"><h2><i class="options icon"></i><u>SEMANTIC ANALYSIS</u></h2></div>
+			<div class="row">
+				<div class="eight wide column " >
+					<div id="semipiechart"></div>
+					<script>
+						var chartData = [{
+						"type": "Positive",
+						"reviews":272 ,
+						"color": "#44c111"
+						}, {
+						"type": "Neutral",
+						"reviews":12,
+						"color": "#f9f63c"
+						}, {
+						"type": "Negative",
+						"reviews": 164,
+						"color": "#f93004"
+						}];
+
+						var sum = 0;
+						for ( var x in chartData ) {
+						  sum += chartData[x].reviews;
+						}
+						chartData.push({
+						  "reviews": sum,
+						  "alpha": 0
+						});
+
+						/**
+						 * Create the chart
+						 */
+
+						var chart = AmCharts.makeChart("semipiechart", {
+						  "type": "pie",
+						  "startAngle": 0,
+						  "radius": "50%",
+						  "innerRadius": "50%",
+						   "colorField": "color",
+						  "dataProvider": chartData,
+						  "valueField": "reviews",
+						  "titleField": "type",
+						  "alphaField": "alpha",
+						  "labelsEnabled": true,
+						  "pullOutRadius": 0,
+						  "pieY": "95%",
+						   "export": {
+										"enabled": true
+									  }
+						});
+
+					</script>
+						</div>
+						
+						<div class="eight wide column" id="fullpiechart">
+						</div>
+						<script>
+						
+						$.ajax({
+			url: 'api_output.json' , 
+			dataType:'json',
+			success:function(result){
+						var chartData = generateChartData();
+						var chart = AmCharts.makeChart( "fullpiechart", {
+  "type": "pie",
+  "theme": "light",
+  "dataProvider": chartData,
+ /* "dataProvider": [ {
+    "feature": "Food and drinks",
+    "reviews": 100
+  }, {
+     "feature": "Price",
+    "reviews": 50
+  }, {
+     "feature": "Location",
+    "reviews": 60
+  }, {
+     "feature": "Staff and service",
+    "reviews": 30
+  }, {
+     "feature": "Rooms",
+    "reviews": 50
+  }, {
+    "feature": "Property",
+    "reviews": 90
+  }, {
+    "feature": "Cleanliness",
+    "reviews":70
+  }, {
+     "feature": "Interact",
+    "reviews": 80
+  }, {
+     "feature": "Hotel overall",
+    "reviews": 120
+  } ],*/
+  "valueField": 'reviews',
+  "titleField": 'feature',
+  "radius": "30%",
+   "balloon":{
+   "fixedPosition":true
+  },
+  "export": {
+    "enabled": true
+  }
+} );
+function generateChartData() {
+    var chartData = [];
+	var name = [];
+	var tot_reviews = [];
+    
+	for(i=0 ; i<result["features"].length-50 ; i++){
+		 name[i] = result["features"][i]["feature"];
+		 tot_reviews[i] = result["features"][i]["total_count"];
+	}
+    for (var i = 0; i < result["features"].length-50; i++) {
+        // we create date objects here. In your data, you can have date strings
+        // and then set format of your dates using chart.dataDateFormat property,
+        // however when possible, use date objects, as this will speed up chart rendering.
+        chartData.push({
+			feature:name[i],
+			reviews:tot_reviews[i]
+        });
+    }
+    return chartData;
+}		}
+		});		
+
+
+		</script>
+					</div>
+					
+					<div class="row" >
+						<div class="sixteen wide column" id="stacked_column">
+						</div>
+						
+						<script>
+						var chart = AmCharts.makeChart("stacked_column", {
+    "type": "serial",
+	"theme": "light",
+    "legend": {
+        "horizontalGap": 10,
+        "maxColumns": 1,
+        "position": "right",
+		"useGraphSettings": true,
+		"markerSize": 10
+    },
+    "dataProvider": [{
+        "month": '16 sep',
+        "positive": 100,
+        "negative": 50,
+        "neutral":30,
+    }, {
+        "month": '18 sep',
+        "positive": 50,
+        "negative": 90,
+        "neutral": 10,
+    },{
+        "month": '19 sep',
+        "positive": 120,
+        "negative": 80,
+        "neutral": 40,
+    },{
+        "month": '21 sep',
+        "positive": 44,
+        "negative": 12,
+        "neutral": 19,
+    },{
+        "month": '23 sep',
+        "positive": 150,
+        "negative": 23,
+        "neutral": 80,
+    },{
+        "month": '25 sep',
+        "positive": 60,
+        "negative": 12,
+        "neutral": 9,
+    },{
+        "month": '27 sep',
+        "positive": 78,
+        "negative": 37,
+        "neutral": 44,
+    },{
+        "month": '29 sep',
+        "positive": 133,
+        "negative": 22,
+        "neutral": 60,
+    },{
+        "month": '29 sep',
+        "positive": 150,
+        "negative": 3,
+        "neutral": 33,
+    },{
+        "month": '1 oct',
+        "positive": 20,
+        "negative": 90,
+        "neutral": 30,
+    },{
+        "month": '3 oct',
+        "positive": 44,
+        "negative": 20,
+        "neutral": 8,
+    },{
+        "month":'5 oct',
+        "positive": 99,
+        "negative": 11,
+        "neutral": 20,
+    },{
+        "month": '7 oct',
+        "positive": 150,
+        "negative": 58,
+        "neutral": 33,
+    },{
+        "month": '9 oct',
+        "positive": 150,
+        "negative": 22,
+        "neutral": 30,
+    }],
+    "valueAxes": [{
+        "stackType": "regular",
+        "axisAlpha": 0.3,
+        "gridAlpha": 0
+    }],
+    "graphs": [{
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Positive",
+        "type": "column",
+		"color": "#000000",
+        "valueField": "positive",
+        "fillColors":"#44c111"
+    }, {
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Negative",
+        "type": "column",
+		"color": "#000000",
+        "valueField": "negative",
+        "fillColors": "#f93004"
+    }, {
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:14px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Neutral",
+        "type": "column",
+		    "color": "#000000",
+        "valueField": "neutral",
+        "fillColors":"#f9f63c"
+    }],
+    "categoryField": "month",
+    "categoryAxis": {
+        "gridPosition": "start",
+        "axisAlpha": 0,
+        "gridAlpha": 0,
+        "position": "left"
+    },
+    "export": {
+    	"enabled": true
+     }
+
+});
+						</script>
+					</div>
+					
+			
+		</div> 
+<br/><br/><br/>
 </div>
 </body>
 </html>
