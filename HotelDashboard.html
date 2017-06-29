@@ -2,23 +2,29 @@
 <html>
 <head>
 <title>Hotel Dashboard</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<!-- <link rel="stylesheet" type="text/css" href="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.css"> -->
+<!--<link rel="stylesheet" type="text/css" href="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.css">-->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
+<link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!-- <script src="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.js"></script> -->
+<!--<script src="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.js"></script>-->
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
 
-<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<!-- <script src="C:/wamp/www/My Projects/jquery-3.2.1.min.js"></script> -->
+
+
+
+ <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
 <script src="https://www.amcharts.com/lib/3/serial.js"></script>
 <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
 <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 <script src="https://www.amcharts.com/lib/3/pie.js"></script>
 
+
 <script>
 $.ajax({
-  url: 'api_output.json',
+  url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e',
   dataType: 'json',
   success: function(result){
            
@@ -33,9 +39,9 @@ $.ajax({
 });
 
 </script>
-
+ 
 <style>
-body{
+/*body{
 	background: -webkit-linear-gradient(#ff9a9e,#fad0c4); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#ff9a9e,#fad0c4); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#ff9a9e,#fad0c4); /* For Firefox 3.6 to 15 */
@@ -45,7 +51,7 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
 	
-	}
+	}*/
 	
 
 
@@ -61,7 +67,7 @@ float:none;}
 
 #sentiment_section{
 width:200px;
-height:200px;
+height:auto;
 overflow-x:scroll;
 overflow-y:scroll;
 }
@@ -84,13 +90,7 @@ width:100%;}
 
 p{
 font-family:Verdana, Geneva, sans-serif;
-word-wrap:word-break;
 }
-
-#Commendable,#Burningissue{
-padding-top:30px;}
-
-
 
 #Hotel_Title{
 color: black;
@@ -105,16 +105,14 @@ margin: 0;
 width:100%;
 }
 
-#FeatureTable thead tr th{
-background-color:#FEC2DE;
-}
-#FeatureTable thead, tbody tr {
+
+#FeatureTable thead,#FeatureTable tbody tr {
     display:table;
     width:100%;
     table-layout:fixed;
 }
 #FeatureTable tbody{
-height:400px;
+height:100px;
 display:block;
 overflow:auto;
 }
@@ -125,20 +123,11 @@ table-layout:fixed;
 }
 #sentiment_section{
 width:100%;
-height:300px;
+height:auto;
 overflow-x:scroll;
 overflow-y:auto;
 }
 
-#sentiments thead tr:nth-child(1){
-background-color:#C2F8FE;
-}
-#sentiments thead tr:nth-child(2){
-background-color:#B8FC9F;
-}
-#sentiments thead tr:nth-child(3){
-background-color:#FEC8CA;
-}
 .review{
 padding:10px;
 width:100%;
@@ -147,7 +136,7 @@ width:100%;
 width:100%;
 }
 #review_table tbody{
-height:450px;
+height:350px;
 display:block;
 overflow:auto;
 }
@@ -166,12 +155,12 @@ font-size:20px;
 /*chart style*/
 #chartdiv1 {
 	width		: 100%;
-	height		: 400px;
+	height		: 300px;
 	font-size	: 11px;
 }	
 #chartdiv2 {
 	width	: 100%;
-	height	: 400px;
+	height	: 300px;
 	
 }
 #semipiechart {
@@ -191,35 +180,41 @@ font-size:20px;
 </head>
 <body>
 <div class="ui fixed menu">
-	<a class="active item">Overview</a>
-	<a class="item">Reviews</a>
-	<a class="item">User ratings</a>
-	<a class="item">Sentiment</a>
-	<a class="item">Competition</a>
+	<a href="#" class="active item">Overview</a>
+	<a href="#review_section" class="item">Reviews</a>
+	<a href="#Rating_section" class="item">User ratings</a>
+	<a href="#sentiment_section" class="item">Sentiment</a>
+	<a href="#c1" class="item">Competition</a>
+	<div class="right menu">
+	<div class="item">
+	<div class="ui calendar" id="from">
+		<div class="ui input left icon">
+		<i class="calendar icon"></i>
+		<input type="text" placeholder="From Date">
+		</div>
+	</div>
+	<div class="ui calendar" id="To">
+		<div class="ui input left icon">
+		<i class="calendar icon"></i>
+		<input type="text" placeholder="To Date">
+		</div>
+	</div>
+	</div>
+	</div>
+	<script>
+		$(document).ready(function () {
+					$('#from').calendar({
+				    type: 'date'
+										});});
+		$(document).ready(function () {
+					$('#To').calendar({
+				    type: 'date'
+										});});
+	</script>
 </div>
 <br/>
-<div id="container" class="ui container">
-	<div class="ui relaxed stackable grid">
-		<div class="seven wide column">
-			<p id="Commendable">COMMENDABLE AREAS</p>
-			<div class="ui divider"></div>
-			<div class="circular ui blue button">Parking</div>
-			<div class="circular ui blue button">Bed</div>
-			<div class="circular ui blue button">Tranquility</div>
-			<div class="circular ui blue button">Decor</div>
-		</div>
-	<div class="nine wide column">
-		<p id="Burningissue">BURNING ISSUES</p>
-		<div class="ui divider"></div>
-		<div class="circular ui orange button">Facilities Problem</div>
-		<div class="circular ui orange button">Floor</div>
-		<div class="circular ui orange button">Humidity</div>
-		<div class="circular ui orange button">Smell</div>
-		<div class="circular ui orange button">Health Hazards</div>
-	</div>
-	</div>
-	<br/>
-	<div class="ui segment" id="Hotel_details">
+<div id="container" class="ui container">	
+	<div class="ui segment" id="Hotel_details" style="margin-top:50px;">
 		<div id="Hotel_Title">
 		</div>
 		<div class="ui relaxed stackable grid">
@@ -234,47 +229,100 @@ font-size:20px;
 		</div>
 		<!-- Display name of hotel,details and image -->
 	</div></div>
+	<div class="ui relaxed stackable grid">
+		<div class="eight wide column">
+			<p id="Commendable">COMMENDABLE AREAS</p>
+			 <div class="ui divider"></div>
+			<div id="commendable_buttons">
+			</div>
+			<script>
+			$.ajax({
+				url:'https://www.buzzopinion.com/externalapi?function=get_daterange_reviews_summary&sku=f753682b-b25b-422f-899d-4480622bcd87&start_date=01/01/2017&end_date=01/06/2017',
+				dataType: 'json',
+				success: function(result){
+					for(i=0;i<result["commendable_aspects"].length;i++){
+						var button_name = result["commendable_aspects"][i];
+						var button = document.createElement("BUTTON");
+						var t = document.createTextNode(button_name);
+						button.appendChild(t);
+						button.className = 'circular ui blue button';
+						document.getElementById("commendable_buttons").appendChild(button);
+					}
+				}
+				
+			});
+			</script>
+		</div>
+	<div class="eight wide column">
+		<p id="Burningissue">BURNING ISSUES</p>
+	  <div class="ui divider"></div> 
+		<div id="burning_buttons">
+		</div>
+		
+     	<script>
+			$.ajax({
+				url:'https://www.buzzopinion.com/externalapi?function=get_daterange_reviews_summary&sku=f753682b-b25b-422f-899d-4480622bcd87&start_date=01/01/2017&end_date=01/06/2017',
+				dataType: 'json',
+				success: function(result){
+					for(i=0;i<result["problem_aspects"].length;i++){
+						var button_name = result["problem_aspects"][i];
+						var button = document.createElement("BUTTON");
+						var t = document.createTextNode(button_name);
+						button.appendChild(t);
+						button.className = 'circular ui orange button';
+						document.getElementById("burning_buttons").appendChild(button);
+					}
+				}
+				
+			});
+			</script>
+	</div>
+	</div>
 	<div class="ui segment" id="Rating_section">
-		<h2><u>REVIEWS AND RATINGS</u></h2>
+		<h3><u>REVIEWS AND RATINGS</u></h3>
 		<!--javascript for features table-->
-			<table class="ui padded pink table" id="FeatureTable" align=center>
+			<table class="ui grey table" id="FeatureTable" align=center>
 				<thead>
 				<tr>
-					<th>Features</th>
+					<th>Sources</th>
 					<th>Total Reviews</th>
-					<th>Ratings</th>
-					<th>Titles</th>
-					<th>Highlights</th>
+					<th>Star Ratings</th>
+					<th>Average overall rating</th>
+					<th>Trend</th>
 				</tr>
 				</thead>
 				<tbody id="FeatureTableBody">
 				<script>
 					$.ajax({
-					  url: 'api_output.json',
+					/*url:*/
+					  /*Sources  total reviews,star rating,average overall rating and trend*/
+					  url: 'https://www.buzzopinion.com/externalapi?function=get_daterange_reviews_summary&sku=f753682b-b25b-422f-899d-4480622bcd87&start_date=01/01/2017&end_date=01/06/2017',
 					  dataType: 'json',
 					  success:function(result){
 						var table = document.getElementById("FeatureTableBody");
  
-						for(i=0;i<result["features"].length;i++){
-							var featureName = result["features"][i]["feature"];
-							var featureTotalCount = result["features"][i]["total_count"];
-							var featureRating = result["features"][i]["rating"];
-							var featureTitle = result["features"][i]["title"];
-							var featureHighlight = result["features"][i]["snippets"]
+						for(i=0;i<result["source_wise_information"].length;i++){
+							var source_name = result["source_wise_information"][i]["source"];
+							var total_reviews = result["source_wise_information"][i]["total_count"];
+							//var star_rating = result["source_wise_information"][i][""];
+							var avg_review_rate = result["source_wise_information"][i]["rating"];
+							var trend_value = result["source_wise_information"][i]["total_count_change_percentage"];
 							
 							var rows = table.insertRow(i);
-							var fname = rows.insertCell(0);
-							var ftc = rows.insertCell(1);
-							var frating = rows.insertCell(2);
-							var ft = rows.insertCell(3);
-							var fh = rows.insertCell(4);
+							var sname = rows.insertCell(0);
+							var tr = rows.insertCell(1);
+							var srating = rows.insertCell(2);
+							var arr = rows.insertCell(3);
+							var trend = rows.insertCell(4);
 							
-							fname.innerHTML=featureName;
-							ftc.innerHTML=featureTotalCount;
-							frating.innerHTML="<meter value="+featureRating+" min='0' low='2' max='5'></meter>"+featureRating;
-							ft.innerHTML=featureTitle;
 							
-							fh.innerHTML = "<i>"+featureHighlight+"</i>";
+							sname.innerHTML=source_name;
+							tr.innerHTML=total_reviews;
+							srating.innerHTML="rating";
+							arr.innerHTML=avg_review_rate;
+							trend.innerHTML=trend_value;
+							
+							
 							
 						}
 							
@@ -285,12 +333,12 @@ font-size:20px;
 			</table>
 	</div>
 	<div class="ui segment" id="sentiment_section">
-		<h2><u>SENTIMENT STATISTICS</u></h2>
+		<h3><u>SENTIMENT STATISTICS</u></h3>
 		<!--javascript for mentions table-->
-		<table class="ui celled blue table" id="sentiments">
+		<table class="ui grey table" id="sentiments">
 			<script>
 				$.ajax({
-					url: 'api_output.json' , 
+					url: 'https://www.buzzopinion.com/externalapi?function=get_daterange_reviews_summary&sku=f753682b-b25b-422f-899d-4480622bcd87&start_date=01/01/2017&end_date=01/06/2017' , 
 					dataType:'json',
 					success:function(result){
 					var table = document.getElementById("sentiments");
@@ -303,17 +351,17 @@ font-size:20px;
 					var pmentions = rowPositive.insertCell(0);
 					var nmentions = rowNegative.insertCell(0);
 					
-					features.innerHTML="<b>FEATURES</b>";
+					features.innerHTML="";
 					pmentions.innerHTML="<b>POSITIVE MENTIONS</b>";
 					nmentions.innerHTML="<b>NEGATIVE MENTIONS</b>";
 					
-					for(i=0;i<result["features"].length;i++){
+					for(i=0;i<result["aspect_wise_information"].length;i++){
 						var name = rowFeatures.insertCell(i+1);
-						name.innerHTML="<b>"+result["features"][i]["feature"]+"<b>";
+						name.innerHTML="<b>"+result["aspect_wise_information"][i]["aspect"]+"<b>";
 						var positiveCount = rowPositive.insertCell(i+1);
-						positiveCount.innerHTML=result["features"][i]["pro_count"];
+						positiveCount.innerHTML=result["aspect_wise_information"][i]["positive_count"]+"<br/>"+result["aspect_wise_information"][i]["positive_count_change_percentage"];
 						var negativeCount = rowNegative.insertCell(i+1);
-						negativeCount.innerHTML=result["features"][i]["con_count"];
+						negativeCount.innerHTML=result["aspect_wise_information"][i]["negative_count"]+"<br/>"+result["aspect_wise_information"][i]["negative_count_change_percentage"];
 						
 					}	
 				}
@@ -326,12 +374,12 @@ font-size:20px;
 	<div class="ui stackable grid">
 		<div id="c1" class="eight wide column">
 		<div class="ui segment">
-			<h2><i class="signal icon"></i><u>COMPETITION</u></h2>
+			<h3><i class="signal icon"></i><u>COMPETITION</u></h3>
 			<div id="chartdiv1"></div>
 			<script>
 			<!--Chart code-->
 			$.ajax({
-			url: 'api_output.json' , 
+			url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e' , 
 			dataType:'json',
 			success:function(result){
 			
@@ -400,9 +448,9 @@ font-size:20px;
 		</div>
 		</div>
 		
-		<div id="c1" class="eight wide column">
+		<div id="c2" class="eight wide column">
 		<div class="ui segment">
-			<h2><i class="options icon"></i><u>SENTIMENTS</u></h2>
+			<h3><i class="options icon"></i><u>SENTIMENTS</u></h3>
 			<div id="chartdiv2"></div>
 			<!--chart code-->
 			<script>
@@ -526,51 +574,50 @@ function generateChartData() {
 	</div>
 	<br/>
 	<div class="ui segment" id="review_section">
-	<h2><i class="alarm icon"></i><u>LATEST REVIEWS</u><a href="#" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h2>
+	<h3><i class="alarm icon"></i><u>LATEST REVIEWS</u><a href="" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h3>
 	<div class="ui divider"></div>
-			<table id="review_table" class="ui padded table" align=center>
+			<table id="review_table" class="ui table" align=center>
 				<tbody id="review_body">
 					<script>
 						$.ajax({
-							url: 'api_output.json' , 
+							url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e' , 
 							dataType:'json',
 							success:function(result){
 								var table = document.getElementById("review_body");
 								for(i=0;i<result["features"].length;i++){
-										/*var feature_name = result["features"][i]["feature"];
-										var row = table.insertRow(-1);
-										var feature_head = row.insertCell(0);
-										feature_head.innerHTML = "<div><h2>"+feature_name+"</h2></div>";
-										feature_head.style.backgroundColor = "#FBD76F";*/
+									
 									for(j=0;j<result["features"][i]["examples"].length;j++){
+										var source = result["features"][i]["examples"][j]["source_text"];
 										var review_text = result["features"][i]["examples"][j]["text"];
+										var replyLink = result["features"][i]["examples"][j]["permalink"];
+										var ratingPercent = result["features"][i]["rating_percentage"];
 										var review_auth = result["features"][i]["examples"][j]["author"][0];
 										var review_date = result["features"][i]["examples"][j]["date"];
 										var row = table.insertRow(-1);
 										var review = row.insertCell(0);
-										review.innerHTML = "<div class='review ui stackable grid' id='load'><div class='two wide column'>Sources</div><div class='seven wide column snippet'><div class='content'>"+review_text+"</div></div><div class='two wide column'>rating</div><div class='three wide column'><i>Dated:"+review_date+"</div><div class='two wide column'><i class='large reply icon'></i><a href='#'>Reply</a></div></div><br/>";
+										review.innerHTML = "<div class='review ui stackable grid' id='load'><div class='two wide column'>"+source+"</div><div class='seven wide column snippet'><div class='content'>"+review_text+"</div></div><div class='two wide column'>"+ratingPercent+"</div><div class='three wide column'><i>Dated:"+review_date+"</div><div class='two wide column'><i class='large reply icon' style='float:right;'></i><a style='float:right;' href='"+replyLink+"'>Reply</a></div></div><br/>";
 									}
 								
 								}
-							
+														$(document).ready(function () {
+								size_li = $("#review_table tbody tr").length;
+								x=5;
+								$('#review_table tbody tr:lt('+x+')').css('display', 'table');
+								
+								$('#loadMore').click(function (e) {
+									x= (x+5 <= size_li) ? x+5 : size_li;
+									$('#review_table tbody tr:lt('+x+')').css('display', 'table');
+									e.preventDefault();
+									
+									
+								});
+							});
+
 							}
 						
 						});
 						
-					$(document).ready(function () {
-    size_li = $("#review_table tbody tr").length;
-    x=6;
-    $('#review_table tbody tr:lt('+x+')').css('display', 'table');
-	
-    $('#loadMore').click(function (e) {
-        x= (x+5 <= size_li) ? x+5 : size_li;
-        $('#review_table tbody tr:lt('+x+')').css('display', 'table');
-		e.preventDefault();
-		
-		
-    });
-});
-
+					
 					</script>
 				</tbody>
 			</table>
@@ -579,7 +626,7 @@ function generateChartData() {
 	<br/>
 	
 		 <div class="ui stackable grid ui segment">
-			<div class="row ui segment"><h2><i class="options icon"></i><u>SEMANTIC ANALYSIS</u></h2></div>
+			<div class="row ui segment"><h3><i class="options icon"></i><u>SEMANTIC ANALYSIS</u></h3></div>
 			<div class="row">
 				<div class="eight wide column " >
 					<div id="semipiechart"></div>
@@ -637,7 +684,7 @@ function generateChartData() {
 						<script>
 						
 						$.ajax({
-			url: 'api_output.json' , 
+			url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e' , 
 			dataType:'json',
 			success:function(result){
 						var chartData = generateChartData();
@@ -645,34 +692,6 @@ function generateChartData() {
   "type": "pie",
   "theme": "light",
   "dataProvider": chartData,
- /* "dataProvider": [ {
-    "feature": "Food and drinks",
-    "reviews": 100
-  }, {
-     "feature": "Price",
-    "reviews": 50
-  }, {
-     "feature": "Location",
-    "reviews": 60
-  }, {
-     "feature": "Staff and service",
-    "reviews": 30
-  }, {
-     "feature": "Rooms",
-    "reviews": 50
-  }, {
-    "feature": "Property",
-    "reviews": 90
-  }, {
-    "feature": "Cleanliness",
-    "reviews":70
-  }, {
-     "feature": "Interact",
-    "reviews": 80
-  }, {
-     "feature": "Hotel overall",
-    "reviews": 120
-  } ],*/
   "valueField": 'reviews',
   "titleField": 'feature',
   "radius": "30%",
@@ -845,7 +864,14 @@ function generateChartData() {
 });
 						</script>
 					</div>
+			<div class="row">
+				<div class="sixteen wide column">
+					<table>
 					
+					</table>
+				</div>
+			
+			</div>
 			
 		</div> 
 <br/><br/><br/>
