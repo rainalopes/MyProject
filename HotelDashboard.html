@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta charset="utf-8"/>
 <title>Hotel Dashboard</title>
 <!--<link rel="stylesheet" type="text/css" href="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.css">-->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
@@ -9,9 +10,14 @@
 <!--<script src="C:/Users/Mr.Lopes/Desktop/dist/semantic.min.js"></script>-->
 <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
+<script src="js/smooth_scroll.js"></script>
 
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ -->
 <!-- <script src="C:/wamp/www/My Projects/jquery-3.2.1.min.js"></script> -->
-
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
  <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
@@ -32,8 +38,10 @@ $.ajax({
 		   $("#Hotel_image").attr("src", result.image);
 		   document.getElementById('Location').innerHTML = "<b>Location :</b> "+result.location;
 		   document.getElementById('Address').innerHTML = "<b>Address :</b> "+result.address;
-		   document.getElementById('ratinglabel').innerHTML = "<b>Rating : "+result.rating+"</b>";
-		   document.getElementById('rating').value = result.rating;
+		   document.getElementById('Hotel_Reviews').innerHTML = result.total_count
+		   document.getElementById('ratings').innerHTML = result.rating;
+// document.getElementById('ratinglabel').innerHTML = "<b>Rating : "+result.rating+"</b>";
+		   // document.getElementById('rating').value = result.rating;
 		   
         }
 });
@@ -71,6 +79,14 @@ height:auto;
 overflow-x:scroll;
 overflow-y:scroll;
 }
+
+#Review_semantic_section{
+width:200px;
+height:auto;
+overflow-x:scroll;
+overflow-y:scroll;
+}
+
 #Rating_section tbody{
 height:300px;
 overflow-x:scroll;
@@ -112,7 +128,7 @@ width:100%;
     table-layout:fixed;
 }
 #FeatureTable tbody{
-height:100px;
+height:110px;
 display:block;
 overflow:auto;
 }
@@ -127,6 +143,11 @@ height:auto;
 overflow-x:scroll;
 overflow-y:auto;
 }
+#Review_semantic_section{
+width:200px;
+height:auto;
+overflow-x:scroll;
+}
 
 .review{
 padding:10px;
@@ -136,7 +157,7 @@ width:100%;
 width:100%;
 }
 #review_table tbody{
-height:350px;
+height:310px;
 display:block;
 overflow:auto;
 }
@@ -176,6 +197,83 @@ font-size:20px;
 	height: 500px;
 }			
 
+.box {
+  float: left;
+  width: 300px;
+  height: 100px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  box-sizing: border-box;
+  border-radius: 3px;
+  color: #fff;
+}
+.blue {
+ 	background-color: #337ab7;
+	border-color: #337ab7;
+}
+
+.green {
+ 	background-color: #5cb85c;
+	border-color: #5cb85c;
+}
+
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+  height: 20px
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  line-height: 0px;
+}
+
+#myBarSuccess {
+  width: 10%;
+  height: 30px;
+  background-color: #0000FF;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  display: inline-block;
+}
+#myBarMed {
+	display: inline-block;
+  width: 10%;
+  height: 30px;
+  background-color: #9999ff;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+#myBarLow {
+  display: inline-block;
+  width: 10%;
+  height: 30px;
+  background-color: #cccc00;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+#myBar2 {
+  width: 10%;
+  height: 30px;
+  background-color: #b3b300;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  display: inline-block;
+}
+#myBar1 {
+  width: 10%;
+  height: 30px;
+  background-color: red;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  display: inline-block;
+}
+
+</style>
 </style>
 </head>
 <body>
@@ -210,6 +308,7 @@ font-size:20px;
 					$('#To').calendar({
 				    type: 'date'
 										});});
+		 
 	</script>
 </div>
 <br/>
@@ -219,14 +318,47 @@ font-size:20px;
 		</div>
 		<div class="ui relaxed stackable grid">
 		<div class="five wide column" id="Hotel_image_section">
-		<img class="ui middle aligned big image" id="Hotel_image"/>
+			<img class="ui middle aligned big image" id="Hotel_image"/>
 		</div>
-		<div class="seven wide column" id="details">
+		<div class="six wide column" id="details">
 			<label id="Location" ></label><br/><br/>
 			<label id="Address" ></label><br/><br/>
-			<label id="ratinglabel"></label><br/><br/>
-			<meter id="rating" min="0" max="5"></meter>
+			<!-- <label id="ratinglabel"></label><br/><br/>
+			<meter id="rating" min="0" max="5"></meter> -->
 		</div>
+		<!-- ********************* -->
+		<div class="column">
+			<div class="ui three wide column grid box blue">
+				<div class="two column row">
+					<div class="left floated column">
+						<i class="fa fa-comments fa-5x column"></i>
+					</div>
+					<div class="right floated column">
+						<div class="two wide column" id="Hotel_Reviews" style="font-size: 40px; margin-top: 12px"></div>
+						<br>
+						<div class="two wide column" style="clear: left;">Total Reviews</div>
+					</div>
+				</div>
+			</div>	
+			<br><br><br><br><br><br>	
+			
+			<div class="ui three wide column grid box green">
+				<div class="two column row">
+					<div class="left floated column">
+						<i class="fa fa-star fa-5x column"></i>
+					</div>
+					<div class="right floated column">
+						<div class="two wide column" id="ratings" style="font-size: 40px; margin-top: 12px"></div>
+						<br>
+						<div class="two wide column" style="clear: left;">Rating</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+<!-- ******************************************* -->
+			<!-- <div class="one column right floated" id="Hotel_Reviews" style="font-size: 40px; clear: left;"></div>
+			<div class="six column">Total Reviews!!</div> -->
+		</div> 
 		<!-- Display name of hotel,details and image -->
 	</div></div>
 	<div class="ui relaxed stackable grid">
@@ -278,7 +410,7 @@ font-size:20px;
 			</script>
 	</div>
 	</div>
-	<div class="ui segment" id="Rating_section">
+	<div class="ui segment" id="Rating_section" >
 		<h3><u>REVIEWS AND RATINGS</u></h3>
 		<!--javascript for features table-->
 			<table class="ui grey table" id="FeatureTable" align=center>
@@ -293,6 +425,13 @@ font-size:20px;
 				</thead>
 				<tbody id="FeatureTableBody">
 				<script>
+
+					// $('.ui.rating')
+				 //    .rating('')
+					//   ;
+					//   $('.toggle.example .rating')
+					// 	  .rating('disable')
+					// 	;
 					$.ajax({
 					/*url:*/
 					  /*Sources  total reviews,star rating,average overall rating and trend*/
@@ -304,7 +443,20 @@ font-size:20px;
 						for(i=0;i<result["source_wise_information"].length;i++){
 							var source_name = result["source_wise_information"][i]["source"];
 							var total_reviews = result["source_wise_information"][i]["total_count"];
-							//var star_rating = result["source_wise_information"][i][""];
+							var star_rating_1 = result["source_wise_information"][i]["1_rating_count"];
+							var star_rating_2 = result["source_wise_information"][i]["2_rating_count"];
+							var star_rating_3 = result["source_wise_information"][i]["3_rating_count"];
+							var star_rating_4 = result["source_wise_information"][i]["4_rating_count"];
+							var star_rating_5 = result["source_wise_information"][i]["5_rating_count"];
+							var star_rating_1_2 = star_rating_1 + star_rating_2;
+							var star_rating_3_4 = star_rating_3 + star_rating_4;
+							var star_total = star_rating_1_2 + star_rating_3_4 + star_rating_5;
+							var star_rating_success = (star_rating_5/star_total)*100;
+							var star_rating_medium = (star_rating_4/star_total)*100;
+							var star_rating_low = (star_rating_3/star_total)*100;
+							var star_rating_2 = (star_rating_2/star_total)*100;
+							var star_rating_1 = (star_rating_1/star_total)*100;
+							 
 							var avg_review_rate = result["source_wise_information"][i]["rating"];
 							var trend_value = result["source_wise_information"][i]["total_count_change_percentage"];
 							
@@ -315,20 +467,48 @@ font-size:20px;
 							var arr = rows.insertCell(3);
 							var trend = rows.insertCell(4);
 							
-							
+							var width=0;
 							sname.innerHTML=source_name;
 							tr.innerHTML=total_reviews;
-							srating.innerHTML="rating";
+							srating.innerHTML='<div id="myProgress"><div id="myBarSuccess">5</div><div id="myBarMed">4</div><div id="myBarLow">3</div><div id="myBar2">2</div><div id="myBar1">1</div></div>';
 							arr.innerHTML=avg_review_rate;
-							trend.innerHTML=trend_value;
-							
-							
+							// trend.innerHTMtrend_value;
+							elem = document.getElementById("myBarSuccess");
+							elem.style.width = width + star_rating_success+"%";
+							// elem.style.backgroundColor = "green";
+							elem1 = document.getElementById("myBarMed");
+							elem1.style.width = width + star_rating_3_4+"%";
+							// elem1.style.backgroundColor = "blue";
+							elem2 = document.getElementById("myBarLow");
+							elem2.style.width = width + star_rating_1_2+"%";
+							// elem2.style.backgroundColor = "red";
+							elem3 = document.getElementById("myBarLow");
+							elem3.style.width = width + star_rating_1_2+"%";
+							// elem2.style.backgroundColor = "red";
+							elem4 = document.getElementById("myBarLow");
+							elem4.style.width = width + star_rating_1_2+"%";
+							// elem2.style.backgroundColor = "red";
+														
+
+
+							console.log(typeof(trend_value));
+							if (trend_value < 0){
+								trend.innerHTML = trend_value +'&nbsp; <i class="fa fa-caret-down" style="color:red" aria-hidden="true"></i>';
+							}
+							else{
+								trend.innerHTML = trend_value + ' &nbsp;<i class="fa fa-caret-up" style="color: green" aria-hidden="true"></i>';
+							}
 							
 						}
 							
 					  }
 					});
 				</script>
+				<!-- <script type="text/javascript">
+					$('.toggle.example .rating')
+						  .rating('disable')
+						;
+				</script> -->
 				</tbody>
 			</table>
 	</div>
@@ -572,57 +752,7 @@ function generateChartData() {
 		
 		
 	</div>
-	<br/>
-	<div class="ui segment" id="review_section">
-	<h3><i class="alarm icon"></i><u>LATEST REVIEWS</u><a href="" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h3>
-	<div class="ui divider"></div>
-			<table id="review_table" class="ui table" align=center>
-				<tbody id="review_body">
-					<script>
-						$.ajax({
-							url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e' , 
-							dataType:'json',
-							success:function(result){
-								var table = document.getElementById("review_body");
-								for(i=0;i<result["features"].length;i++){
-									
-									for(j=0;j<result["features"][i]["examples"].length;j++){
-										var source = result["features"][i]["examples"][j]["source_text"];
-										var review_text = result["features"][i]["examples"][j]["text"];
-										var replyLink = result["features"][i]["examples"][j]["permalink"];
-										var ratingPercent = result["features"][i]["rating_percentage"];
-										var review_auth = result["features"][i]["examples"][j]["author"][0];
-										var review_date = result["features"][i]["examples"][j]["date"];
-										var row = table.insertRow(-1);
-										var review = row.insertCell(0);
-										review.innerHTML = "<div class='review ui stackable grid' id='load'><div class='two wide column'>"+source+"</div><div class='seven wide column snippet'><div class='content'>"+review_text+"</div></div><div class='two wide column'>"+ratingPercent+"</div><div class='three wide column'><i>Dated:"+review_date+"</div><div class='two wide column'><i class='large reply icon' style='float:right;'></i><a style='float:right;' href='"+replyLink+"'>Reply</a></div></div><br/>";
-									}
-								
-								}
-														$(document).ready(function () {
-								size_li = $("#review_table tbody tr").length;
-								x=5;
-								$('#review_table tbody tr:lt('+x+')').css('display', 'table');
-								
-								$('#loadMore').click(function (e) {
-									x= (x+5 <= size_li) ? x+5 : size_li;
-									$('#review_table tbody tr:lt('+x+')').css('display', 'table');
-									e.preventDefault();
-									
-									
-								});
-							});
 
-							}
-						
-						});
-						
-					
-					</script>
-				</tbody>
-			</table>
-		
-	</div>
 	<br/>
 	
 		 <div class="ui stackable grid ui segment">
@@ -865,16 +995,96 @@ function generateChartData() {
 						</script>
 					</div>
 			<div class="row">
-				<div class="sixteen wide column">
-					<table>
+				<div class="sixteen wide column ui segment" id="Review_semantic_section">
+				<h3><u>Review Semantics by Source</u></h3>
+					<table class="ui grey table" id="Review_semantics">
+			<script>
+				$.ajax({
+					url: 'https://www.buzzopinion.com/externalapi?function=get_daterange_reviews_summary&sku=f753682b-b25b-422f-899d-4480622bcd87&start_date=01/01/2017&end_date=01/06/2017' , 
+					dataType:'json',
+					success:function(result){
+					var table = document.getElementById("Review_semantics");
+					var header = table.createTHead();
+					var rowLocation = header.insertRow(0);
+					var rowReviews = header.insertRow(1);
+					/*var rowNegative = header.insertRow(2);*/
 					
-					</table>
+					var location = rowLocation.insertCell(0);
+					var reviews = rowReviews.insertCell(0);
+					/*var nmentions = rowNegative.insertCell(0);*/
+					
+					location.innerHTML="<b>Location</b>";
+					reviews.innerHTML="<b>Based on reviews from sources</b>";
+					/*nmentions.innerHTML="<b>NEGATIVE MENTIONS</b>";*/
+					
+					for(i=0;i<result["aspect_wise_information"].length;i++){
+						var name = rowLocation.insertCell(i+1);
+						name.innerHTML="<b>"+result["aspect_wise_information"][i]["aspect"]+"<b>";
+						var ReviewCount = rowReviews.insertCell(i+1);
+						ReviewCount.innerHTML=result["aspect_wise_information"][i]["total_count"]+"<br/>"+result["aspect_wise_information"][i]["total_count_change_percentage"];
+						/*var negativeCount = rowNegative.insertCell(i);
+						negativeCount.innerHTML=result["aspect_wise_information"][i]["negative_count"]+"<br/>"+result["aspect_wise_information"][i]["negative_count_change_percentage"];*/
+						
+					}	
+				}
+				});
+			</script>
+		</table>
 				</div>
 			
 			</div>
 			
 		</div> 
-<br/><br/><br/>
+	<div class="ui segment" id="review_section">
+	<h3><i class="alarm icon"></i><u>LATEST REVIEWS</u><a href="" id="loadMore" style="float:right;display:inline;font-size:15px;">More</a></h3>
+	<div class="ui divider"></div>
+			<table id="review_table" class="ui table" align=center>
+				<tbody id="review_body">
+					<script>
+						$.ajax({
+							url: 'https://www.buzzopinion.com/externalapi?function=get_entity_review_summary&sku=df09dddf-56fe-4d56-a1b1-97a306b7f58e' , 
+							dataType:'json',
+							success:function(result){
+								var table = document.getElementById("review_body");
+								for(i=0;i<result["features"].length;i++){
+									
+									for(j=0;j<result["features"][i]["examples"].length;j++){
+										var source = result["features"][i]["examples"][j]["source_text"];
+										var review_text = result["features"][i]["examples"][j]["text"];
+										var replyLink = result["features"][i]["examples"][j]["permalink"];
+										var ratingPercent = result["features"][i]["rating_percentage"];
+										var review_auth = result["features"][i]["examples"][j]["author"][0];
+										var review_date = result["features"][i]["examples"][j]["date"];
+										var row = table.insertRow(-1);
+										var review = row.insertCell(0);
+										review.innerHTML = "<div class='review ui stackable grid' id='load'><div class='two wide column'>"+source+"</div><div class='seven wide column snippet'><div class='content'>"+review_text+"</div></div><div class='two wide column'>"+ratingPercent+"</div><div class='three wide column'><i>Dated:"+review_date+"</div><div class='two wide column'><i class='large reply icon' style='float:right;'></i><a style='float:right;' href='"+replyLink+"'>Reply</a></div></div><br/>";
+									}
+								
+								}
+														$(document).ready(function () {
+								size_li = $("#review_table tbody tr").length;
+								x=5;
+								$('#review_table tbody tr:lt('+x+')').css('display', 'table');
+								
+								$('#loadMore').click(function (e) {
+									x= (x+5 <= size_li) ? x+5 : size_li;
+									$('#review_table tbody tr:lt('+x+')').css('display', 'table');
+									e.preventDefault();
+									
+									
+								});
+							});
+
+							}
+						
+						});
+						
+					
+					</script>
+				</tbody>
+			</table>
+		
+	</div>
 </div>
 </body>
 </html>
