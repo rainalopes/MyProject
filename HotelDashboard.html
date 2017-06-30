@@ -512,7 +512,7 @@ font-size:20px;
 				</tbody>
 			</table>
 	</div>
-	<div class="ui segment" id="sentiment_section">
+<div class="ui segment" id="sentiment_section">
 		<h3><u>SENTIMENT STATISTICS</u></h3>
 		<!--javascript for mentions table-->
 		<table class="ui grey table" id="sentiments">
@@ -539,10 +539,24 @@ font-size:20px;
 						var name = rowFeatures.insertCell(i+1);
 						name.innerHTML="<b>"+result["aspect_wise_information"][i]["aspect"]+"<b>";
 						var positiveCount = rowPositive.insertCell(i+1);
-						positiveCount.innerHTML=result["aspect_wise_information"][i]["positive_count"]+"<br/>"+result["aspect_wise_information"][i]["positive_count_change_percentage"];
+						var positiveCnt =result["aspect_wise_information"][i]["positive_count"];
 						var negativeCount = rowNegative.insertCell(i+1);
-						negativeCount.innerHTML=result["aspect_wise_information"][i]["negative_count"]+"<br/>"+result["aspect_wise_information"][i]["negative_count_change_percentage"];
+						var negativeCnt=result["aspect_wise_information"][i]["negative_count"];
+						var pos_perc = result["aspect_wise_information"][i]["positive_count_change_percentage"];
+						var neg_perc = result["aspect_wise_information"][i]["negative_count_change_percentage"];
+						if(pos_perc < 0){
+							positiveCount.innerHTML = positiveCnt + "<br>" + pos_perc + '&nbsp; <i class="fa fa-caret-down" style="color:red" aria-hidden="true"></i>';
+						}
+						else{
+							positiveCount.innerHTML = positiveCnt + "<br>" + pos_perc + ' &nbsp;<i class="fa fa-caret-up" style="color: green" aria-hidden="true"></i>';
+						}
 						
+						if(neg_perc < 0){
+							negativeCount.innerHTML = negativeCnt + "<br>" + neg_perc + '&nbsp; <i class="fa fa-caret-down" style="color:red" aria-hidden="true"></i>';
+						}
+						else{
+							negativeCount.innerHTML = negativeCnt + "<br>" + neg_perc + '&nbsp; <i class="fa fa-caret-down" style="color:red" aria-hidden="true"></i>';	
+						}
 					}	
 				}
 				});
